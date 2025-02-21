@@ -347,7 +347,7 @@ type_qualifier
 	;
 
 declarator
-	: pointer direct_declarator {string pointerType=currentType+" pointer";add_to_token_table($2,pointerType);}
+	: pointer direct_declarator {add_to_token_table($2,currentType);}
 	| direct_declarator
 	;
 
@@ -388,11 +388,10 @@ direct_declarator
 
 
 pointer
-	: '*' {$$=strdup("*");}
+	: '*' {currentType+='*';}
 	| '*' type_qualifier_list
 	| '*' pointer { 
-            std::string temp = "* " + std::string($2);
-            $$ = strdup(temp.c_str());
+            currentType+='*';
         }
 	| '*' type_qualifier_list pointer
 	;

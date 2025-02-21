@@ -683,14 +683,14 @@ static const yytype_int16 yyrline[] =
      282,   283,   287,   291,   292,   293,   294,   298,   299,   303,
      304,   305,   309,   314,   321,   332,   333,   337,   339,   345,
      346,   350,   351,   355,   359,   360,   366,   371,   377,   382,
-     391,   392,   393,   397,   401,   402,   406,   407,   411,   412,
-     416,   417,   418,   422,   423,   427,   428,   432,   433,   434,
-     438,   439,   440,   441,   442,   443,   444,   445,   446,   450,
-     451,   452,   456,   457,   461,   462,   463,   464,   465,   466,
-     470,   471,   472,   476,   477,   478,   479,   483,   484,   488,
-     489,   493,   494,   498,   499,   500,   504,   505,   506,   507,
-     511,   512,   513,   514,   515,   519,   520,   524,   525,   529,
-     530,   531,   532
+     391,   392,   393,   396,   400,   401,   405,   406,   410,   411,
+     415,   416,   417,   421,   422,   426,   427,   431,   432,   433,
+     437,   438,   439,   440,   441,   442,   443,   444,   445,   449,
+     450,   451,   455,   456,   460,   461,   462,   463,   464,   465,
+     469,   470,   471,   475,   476,   477,   478,   482,   483,   487,
+     488,   492,   493,   497,   498,   499,   503,   504,   505,   506,
+     510,   511,   512,   513,   514,   518,   519,   523,   524,   528,
+     529,   530,   531
 };
 #endif
 
@@ -1890,7 +1890,7 @@ yyreduce:
 
   case 131: /* declarator: pointer direct_declarator  */
 #line 350 "grammar.y"
-                                    {string pointerType=currentType+" pointer";add_to_token_table((yyvsp[0].sval),pointerType);}
+                                    {add_to_token_table((yyvsp[0].sval),currentType);}
 #line 1895 "grammar.tab.c"
     break;
 
@@ -1963,21 +1963,20 @@ yyreduce:
 
   case 140: /* pointer: '*'  */
 #line 391 "grammar.y"
-              {(yyval.sval)=strdup("*");}
+              {currentType+='*';}
 #line 1968 "grammar.tab.c"
     break;
 
   case 142: /* pointer: '*' pointer  */
 #line 393 "grammar.y"
                       { 
-            std::string temp = "* " + std::string((yyvsp[0].sval));
-            (yyval.sval) = strdup(temp.c_str());
+            currentType+='*';
         }
-#line 1977 "grammar.tab.c"
+#line 1976 "grammar.tab.c"
     break;
 
 
-#line 1981 "grammar.tab.c"
+#line 1980 "grammar.tab.c"
 
       default: break;
     }
@@ -2170,7 +2169,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 535 "grammar.y"
+#line 534 "grammar.y"
 
 
 #include <iostream>
