@@ -24,7 +24,7 @@ extern unordered_map<string, string> new_symtab;
 
 // current Type declaration
 string currentType = "";
-
+bool toextend=false;
 int yylex();
 void yyerror(const char *s);
 
@@ -213,7 +213,7 @@ declaration
 	;
 
 declaration_specifiers
-	: storage_class_specifier
+	: storage_class_specifier 
 	| storage_class_specifier declaration_specifiers
 	| type_specifier
 	| type_specifier declaration_specifiers
@@ -232,23 +232,23 @@ init_declarator
 	;
 
 storage_class_specifier
-	: TYPEDEF
-	| EXTERN
-	| STATIC
-	| AUTO
-	| REGISTER
+	: TYPEDEF 
+	| EXTERN  
+	| STATIC {currentType="STATIC"; $$="STATIC";}
+	| AUTO {currentType="AUTO"; $$="AUTO";}
+	| REGISTER 
 	;
 
 type_specifier
-	: VOID   { currentType = "VOID"; $$="VOID"; }
-	| CHAR   { currentType = "CHAR"; $$= "CHAR";}
-	| SHORT  { currentType = "SHORT"; $$="SHORT";}
-	| INT    { currentType = "INT"; $$="INT";}
-	| LONG   { currentType = "LONG"; $$="LONG";}
-	| FLOAT  { currentType = "FLOAT"; $$="FLOAT";}
-	| DOUBLE { currentType = "DOUBLE"; $$="DOUBLE";}
-	| SIGNED { currentType = "SIGNED"; $$="SIGNED";}
-	| UNSIGNED { currentType = "UNSIGNED"; $$="UNSIGNED";}
+	: VOID   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " VOID";}else{currentType="VOID";} $$="VOID"; }
+	| CHAR   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " CHAR";}else{currentType = "CHAR";} $$= "CHAR";}
+	| SHORT  { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " SHORT";}else{currentType = "SHORT";} $$="SHORT";}
+	| INT    { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " INT";}else{currentType = "INT";} $$="INT";}
+	| LONG   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " LONG";}else{currentType = "LONG";} $$="LONG";}
+	| FLOAT  { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " FLOAT";}else{currentType = "FLOAT";} $$="FLOAT";}
+	| DOUBLE { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " DOUBLE";}else{currentType = "DOUBLE";} $$="DOUBLE";}
+	| SIGNED { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " SIGNED";}else{currentType = "SIGNED";} $$="SIGNED";}
+	| UNSIGNED { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " UNSIGNED";}else{currentType = "UNSIGNED";} $$="UNSIGNED";}
 	| struct_or_union_specifier {  } // Simplified, you might want to handle this more specifically
 	| enum_specifier {  } // Simplified, you might want to handle this more specifically
 	| TYPE_NAME { currentType = "TYPE_NAME"; $$="TYPE_NAME";} // You might want to handle this differently depending on your needs
