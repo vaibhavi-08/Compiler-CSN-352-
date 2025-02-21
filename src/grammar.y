@@ -1,4 +1,5 @@
 /* grammar.y */
+
 %{
 #include <iostream>
 #include <string>
@@ -27,7 +28,7 @@ string currentType = "";
 bool toextend=false;
 int yylex();
 void yyerror(const char *s);
-
+string syntaxerror="";
 void add_to_token_table(string token, string type);
 
 %}
@@ -234,24 +235,24 @@ init_declarator
 storage_class_specifier
 	: TYPEDEF 
 	| EXTERN  
-	| STATIC {currentType="STATIC"; $$="STATIC";}
-	| AUTO {currentType="AUTO"; $$="AUTO";}
+	| STATIC {currentType="STATIC"; $$="STATIC";toextend=true;}
+	| AUTO {currentType="AUTO"; $$="AUTO";toextend=true;}
 	| REGISTER 
 	;
 
 type_specifier
-	: VOID   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " VOID";}else{currentType="VOID";} $$="VOID"; }
-	| CHAR   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " CHAR";}else{currentType = "CHAR";} $$= "CHAR";}
-	| SHORT  { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " SHORT";}else{currentType = "SHORT";} $$="SHORT";}
-	| INT    { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " INT";}else{currentType = "INT";} $$="INT";}
-	| LONG   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " LONG";}else{currentType = "LONG";} $$="LONG";}
-	| FLOAT  { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " FLOAT";}else{currentType = "FLOAT";} $$="FLOAT";}
-	| DOUBLE { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " DOUBLE";}else{currentType = "DOUBLE";} $$="DOUBLE";}
-	| SIGNED { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " SIGNED";}else{currentType = "SIGNED";} $$="SIGNED";}
-	| UNSIGNED { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " UNSIGNED";}else{currentType = "UNSIGNED";} $$="UNSIGNED";}
-	| struct_or_union_specifier {  } // Simplified, you might want to handle this more specifically
-	| enum_specifier {  } // Simplified, you might want to handle this more specifically
-	| TYPE_NAME { currentType = "TYPE_NAME"; $$="TYPE_NAME";} // You might want to handle this differently depending on your needs
+	: VOID   { if(toextend){currentType += " VOID";}else{currentType="VOID";}toextend=false; $$="VOID"; }
+	| CHAR   { if(toextend){currentType += " CHAR";}else{currentType = "CHAR";} toextend=false;$$= "CHAR";}
+	| SHORT  { if(toextend){currentType += " SHORT";}else{currentType = "SHORT";} toextend=false;$$="SHORT";}
+	| INT    { if(toextend){currentType += " INT";}else{currentType = "INT";}toextend=false; $$="INT";}
+	| LONG   { if(toextend){currentType += " LONG";}else{currentType = "LONG";} toextend=false;$$="LONG";}
+	| FLOAT  { if(toextend){currentType += " FLOAT";}else{currentType = "FLOAT";} toextend=false;$$="FLOAT";}
+	| DOUBLE { if(toextend){currentType += " DOUBLE";}else{currentType = "DOUBLE";} toextend=false;$$="DOUBLE";}
+	| SIGNED { if(toextend){currentType += " SIGNED";}else{currentType = "SIGNED";toextend=true;} $$="SIGNED";}
+	| UNSIGNED { if(toextend){currentType += " UNSIGNED";}else{currentType = "UNSIGNED";toextend=true;} $$="UNSIGNED";}
+	| struct_or_union_specifier { toextend=false;  } // Simplified, you might want to handle this more specifically
+	| enum_specifier {  toextend=false;} // Simplified, you might want to handle this more specifically
+	| TYPE_NAME { currentType = "TYPE_NAME"; $$="TYPE_NAME";toextend=false;} // You might want to handle this differently depending on your needs
 	;
 
 
@@ -259,7 +260,7 @@ struct_or_union_specifier
     : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
         {
             currentType = string($1) + " " + string($2); // Set currentType to "struct Point" or "union Point"
-            add_to_token_table($2, $1);                 // Add "Point" as a struct or union to the symbol table
+            add_to_token_table($2, $1);           // Add "Point" as a struct or union to the symbol table
         }
 	| struct_or_union '{' struct_declaration_list '}' 
 	   {
@@ -317,6 +318,7 @@ enum_specifier
         currentType = enumType.c_str();
         $$ = strdup(enumType.c_str());
         add_to_token_table($2, "enum");
+
       }
     | ENUM IDENTIFIER
       {
@@ -342,12 +344,12 @@ enumerator
 
 
 type_qualifier
-	: CONST
-	| VOLATILE
+	: CONST {currentType="const"; toextend=true;}
+	| VOLATILE {currentType="volatile"; toextend=true;}
 	;
 
 declarator
-	: pointer direct_declarator {add_to_token_table($2,currentType);}
+	: pointer direct_declarator {add_to_token_table($2,currentType); currentType=""; toextend=false;}
 	| direct_declarator
 	;
 
@@ -370,7 +372,7 @@ direct_declarator
 	}
 	| direct_declarator '(' parameter_type_list ')' {
 		// For function types, you might want to handle this differently
-		string funcType = currentType + " function";
+		string funcType = "procedure";
 		add_to_token_table($1, funcType);
 		$$ = $1;
 	}
@@ -542,6 +544,11 @@ extern int yyparse();
 void yyerror(const char *s) {
     extern int line;
     fprintf(stderr, "Error: %s at line %d\n", s, line);
+	syntaxerror="ERROR: ";
+	syntaxerror+=s;
+	syntaxerror+="at line ";
+	syntaxerror += std::to_string(line);
+
 }
 
 // Define the global variables here
@@ -592,6 +599,8 @@ int main(int argc, char *argv[]) {
          cout << "Parsing successful!" << endl;
     } else {
         cerr << "Parsing failed!" << endl;
+		outputFile << "Parsing Failed!" << endl;
+		outputFile << syntaxerror << endl;
     }
        // Check if there are errors
     if (!error.empty()) {
@@ -602,6 +611,7 @@ int main(int argc, char *argv[]) {
         }
     } 
 	else {
+		/*
         outputFile << "Original Symbol Table:\n";
         outputFile << "-------------------------------------------------------------------------------\n";
         outputFile << "| Lexeme                                | Token                                 |\n";
@@ -624,24 +634,25 @@ int main(int argc, char *argv[]) {
         }
         outputFile << "-------------------------------------------------------------------------------\n";
         outputFile << '\n';
+		*/
+		
+		outputFile << "\nNew Symbol Table (Tokens and Types):\n";
+		outputFile << "-------------------------------------------------------------------------------\n";
+		outputFile << "| Token                                 | Type                                  |\n";
+		outputFile << "-------------------------------------------------------------------------------\n";
 
-        outputFile << "\nNew Symbol Table (Tokens and Types):\n";
-        outputFile << "-------------------------------------------------------------------------------\n";
-        outputFile << "| Token                 | Type                  |\n";
-        outputFile << "-------------------------------------------------------------------------------\n";
+		for (const auto &entry : new_symtab) {
+			outputFile << "| " << setw(36) << left << entry.first
+					<< " | " << setw(36) << left << entry.second << "|\n";
+		}
 
-        for (const auto &entry : new_symtab) {
-            outputFile << "| " << setw(20) << left << entry.first
-                       << " | " << setw(20) << left << entry.second << "\n";
-        }
-
-        outputFile << "-------------------------------------------------------------------------------\n";
-        outputFile << '\n';
-        outputFile << "whole program after separation:\n";
-        for (const auto &i : program) {
-            outputFile << "|" << i << "|\n";
-        }
-
+		outputFile << "-------------------------------------------------------------------------------\n";
+		outputFile << '\n';
+		outputFile << "whole program after separation:\n";
+		for (const auto &i : program) {
+			outputFile << "|" << i << "|\n";
+		}
+		
     }
 
     fclose(inputFile);

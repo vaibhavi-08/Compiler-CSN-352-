@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_GRAMMAR_TAB_H_INCLUDED
-# define YY_YY_GRAMMAR_TAB_H_INCLUDED
+#ifndef YY_YY_SRC_GRAMMAR_TAB_H_INCLUDED
+# define YY_YY_SRC_GRAMMAR_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -121,13 +121,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 35 "grammar.y"
+#line 36 "src/grammar.y"
  // Define the union for token values. Add necessary types.
     int ival;       // Integer value
     char *sval;    // String value (e.g., for identifiers)
     // You might need other types depending on your grammar (e.g., float, double)
 
-#line 131 "grammar.tab.h"
+#line 131 "src/grammar.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -142,4 +142,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_GRAMMAR_TAB_H_INCLUDED  */
+#endif /* !YY_YY_SRC_GRAMMAR_TAB_H_INCLUDED  */

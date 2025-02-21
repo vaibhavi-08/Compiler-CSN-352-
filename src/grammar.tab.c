@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 2 "grammar.y"
+#line 3 "src/grammar.y"
 
 #include <iostream>
 #include <string>
@@ -93,14 +93,14 @@ extern unordered_map<string, string> new_symtab;
 
 // current Type declaration
 string currentType = "";
-
+bool toextend=false;
 int yylex();
 void yyerror(const char *s);
-
+string syntaxerror="";
 void add_to_token_table(string token, string type);
 
 
-#line 104 "grammar.tab.c"
+#line 104 "src/grammar.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -669,28 +669,28 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    73,    73,    74,    75,    76,    80,    81,    82,    83,
-      84,    85,    86,    87,    91,    92,    96,    97,    98,    99,
-     100,   101,   105,   106,   107,   108,   109,   110,   115,   116,
-     120,   121,   122,   123,   127,   128,   129,   133,   134,   135,
-     139,   140,   141,   142,   143,   147,   148,   149,   153,   154,
-     158,   159,   163,   164,   168,   169,   173,   174,   178,   179,
-     183,   184,   188,   189,   190,   191,   192,   193,   194,   195,
-     196,   197,   198,   202,   203,   207,   211,   212,   216,   217,
-     218,   219,   220,   221,   225,   226,   230,   231,   235,   236,
-     237,   238,   239,   243,   244,   245,   246,   247,   248,   249,
-     250,   251,   252,   253,   254,   259,   264,   268,   277,   278,
-     282,   283,   287,   291,   292,   293,   294,   298,   299,   303,
-     304,   305,   309,   314,   321,   332,   333,   337,   339,   345,
-     346,   350,   351,   355,   359,   360,   366,   371,   377,   382,
-     391,   392,   393,   396,   400,   401,   405,   406,   410,   411,
-     415,   416,   417,   421,   422,   426,   427,   431,   432,   433,
-     437,   438,   439,   440,   441,   442,   443,   444,   445,   449,
-     450,   451,   455,   456,   460,   461,   462,   463,   464,   465,
-     469,   470,   471,   475,   476,   477,   478,   482,   483,   487,
-     488,   492,   493,   497,   498,   499,   503,   504,   505,   506,
-     510,   511,   512,   513,   514,   518,   519,   523,   524,   528,
-     529,   530,   531
+       0,    74,    74,    75,    76,    77,    81,    82,    83,    84,
+      85,    86,    87,    88,    92,    93,    97,    98,    99,   100,
+     101,   102,   106,   107,   108,   109,   110,   111,   116,   117,
+     121,   122,   123,   124,   128,   129,   130,   134,   135,   136,
+     140,   141,   142,   143,   144,   148,   149,   150,   154,   155,
+     159,   160,   164,   165,   169,   170,   174,   175,   179,   180,
+     184,   185,   189,   190,   191,   192,   193,   194,   195,   196,
+     197,   198,   199,   203,   204,   208,   212,   213,   217,   218,
+     219,   220,   221,   222,   226,   227,   231,   232,   236,   237,
+     238,   239,   240,   244,   245,   246,   247,   248,   249,   250,
+     251,   252,   253,   254,   255,   260,   265,   269,   278,   279,
+     283,   284,   288,   292,   293,   294,   295,   299,   300,   304,
+     305,   306,   310,   315,   323,   334,   335,   339,   341,   347,
+     348,   352,   353,   357,   361,   362,   368,   373,   379,   384,
+     393,   394,   395,   398,   402,   403,   407,   408,   412,   413,
+     417,   418,   419,   423,   424,   428,   429,   433,   434,   435,
+     439,   440,   441,   442,   443,   444,   445,   446,   447,   451,
+     452,   453,   457,   458,   462,   463,   464,   465,   466,   467,
+     471,   472,   473,   477,   478,   479,   480,   484,   485,   489,
+     490,   494,   495,   499,   500,   501,   505,   506,   507,   508,
+     512,   513,   514,   515,   516,   520,   521,   525,   526,   530,
+     531,   532,   533
 };
 #endif
 
@@ -1682,313 +1682,326 @@ yyreduce:
   switch (yyn)
     {
   case 62: /* assignment_operator: '='  */
-#line 188 "grammar.y"
+#line 189 "src/grammar.y"
                     { (yyval.sval) = "="; /* No change to currentType */ }
-#line 1688 "grammar.tab.c"
+#line 1688 "src/grammar.tab.c"
     break;
 
   case 63: /* assignment_operator: MUL_ASSIGN  */
-#line 189 "grammar.y"
+#line 190 "src/grammar.y"
                     { (yyval.sval) = "*="; /* No change to currentType */ }
-#line 1694 "grammar.tab.c"
+#line 1694 "src/grammar.tab.c"
     break;
 
   case 64: /* assignment_operator: DIV_ASSIGN  */
-#line 190 "grammar.y"
+#line 191 "src/grammar.y"
                     { (yyval.sval) = "/="; /* No change to currentType */ }
-#line 1700 "grammar.tab.c"
+#line 1700 "src/grammar.tab.c"
     break;
 
   case 65: /* assignment_operator: MOD_ASSIGN  */
-#line 191 "grammar.y"
+#line 192 "src/grammar.y"
                     { (yyval.sval) = "%="; currentType = "INT"; }
-#line 1706 "grammar.tab.c"
+#line 1706 "src/grammar.tab.c"
     break;
 
   case 66: /* assignment_operator: ADD_ASSIGN  */
-#line 192 "grammar.y"
+#line 193 "src/grammar.y"
                     { (yyval.sval) = "+="; /* No change to currentType */ }
-#line 1712 "grammar.tab.c"
+#line 1712 "src/grammar.tab.c"
     break;
 
   case 67: /* assignment_operator: SUB_ASSIGN  */
-#line 193 "grammar.y"
+#line 194 "src/grammar.y"
                     { (yyval.sval) = "-="; /* No change to currentType */ }
-#line 1718 "grammar.tab.c"
+#line 1718 "src/grammar.tab.c"
     break;
 
   case 68: /* assignment_operator: LEFT_ASSIGN  */
-#line 194 "grammar.y"
+#line 195 "src/grammar.y"
                     { (yyval.sval) = "<<="; currentType = "INT"; }
-#line 1724 "grammar.tab.c"
+#line 1724 "src/grammar.tab.c"
     break;
 
   case 69: /* assignment_operator: RIGHT_ASSIGN  */
-#line 195 "grammar.y"
+#line 196 "src/grammar.y"
                     { (yyval.sval) = ">>="; currentType = "INT"; }
-#line 1730 "grammar.tab.c"
+#line 1730 "src/grammar.tab.c"
     break;
 
   case 70: /* assignment_operator: AND_ASSIGN  */
-#line 196 "grammar.y"
+#line 197 "src/grammar.y"
                     { (yyval.sval) = "&="; currentType = "INT"; }
-#line 1736 "grammar.tab.c"
+#line 1736 "src/grammar.tab.c"
     break;
 
   case 71: /* assignment_operator: XOR_ASSIGN  */
-#line 197 "grammar.y"
+#line 198 "src/grammar.y"
                     { (yyval.sval) = "^="; currentType = "INT"; }
-#line 1742 "grammar.tab.c"
+#line 1742 "src/grammar.tab.c"
     break;
 
   case 72: /* assignment_operator: OR_ASSIGN  */
-#line 198 "grammar.y"
+#line 199 "src/grammar.y"
                     { (yyval.sval) = "|="; currentType = "INT"; }
-#line 1748 "grammar.tab.c"
+#line 1748 "src/grammar.tab.c"
     break;
 
   case 90: /* storage_class_specifier: STATIC  */
-#line 237 "grammar.y"
-                 {currentType="STATIC"; (yyval.sval)="STATIC";}
-#line 1754 "grammar.tab.c"
+#line 238 "src/grammar.y"
+                 {currentType="STATIC"; (yyval.sval)="STATIC";toextend=true;}
+#line 1754 "src/grammar.tab.c"
     break;
 
   case 91: /* storage_class_specifier: AUTO  */
-#line 238 "grammar.y"
-               {currentType="AUTO"; (yyval.sval)="AUTO";}
-#line 1760 "grammar.tab.c"
+#line 239 "src/grammar.y"
+               {currentType="AUTO"; (yyval.sval)="AUTO";toextend=true;}
+#line 1760 "src/grammar.tab.c"
     break;
 
   case 93: /* type_specifier: VOID  */
-#line 243 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " VOID";}else{currentType="VOID";} (yyval.sval)="VOID"; }
-#line 1766 "grammar.tab.c"
+#line 244 "src/grammar.y"
+                 { if(toextend){currentType += " VOID";}else{currentType="VOID";}toextend=false; (yyval.sval)="VOID"; }
+#line 1766 "src/grammar.tab.c"
     break;
 
   case 94: /* type_specifier: CHAR  */
-#line 244 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " CHAR";}else{currentType = "CHAR";} (yyval.sval)= "CHAR";}
-#line 1772 "grammar.tab.c"
+#line 245 "src/grammar.y"
+                 { if(toextend){currentType += " CHAR";}else{currentType = "CHAR";} toextend=false;(yyval.sval)= "CHAR";}
+#line 1772 "src/grammar.tab.c"
     break;
 
   case 95: /* type_specifier: SHORT  */
-#line 245 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " SHORT";}else{currentType = "SHORT";} (yyval.sval)="SHORT";}
-#line 1778 "grammar.tab.c"
+#line 246 "src/grammar.y"
+                 { if(toextend){currentType += " SHORT";}else{currentType = "SHORT";} toextend=false;(yyval.sval)="SHORT";}
+#line 1778 "src/grammar.tab.c"
     break;
 
   case 96: /* type_specifier: INT  */
-#line 246 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " INT";}else{currentType = "INT";} (yyval.sval)="INT";}
-#line 1784 "grammar.tab.c"
+#line 247 "src/grammar.y"
+                 { if(toextend){currentType += " INT";}else{currentType = "INT";}toextend=false; (yyval.sval)="INT";}
+#line 1784 "src/grammar.tab.c"
     break;
 
   case 97: /* type_specifier: LONG  */
-#line 247 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " LONG";}else{currentType = "LONG";} (yyval.sval)="LONG";}
-#line 1790 "grammar.tab.c"
+#line 248 "src/grammar.y"
+                 { if(toextend){currentType += " LONG";}else{currentType = "LONG";} toextend=false;(yyval.sval)="LONG";}
+#line 1790 "src/grammar.tab.c"
     break;
 
   case 98: /* type_specifier: FLOAT  */
-#line 248 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " FLOAT";}else{currentType = "FLOAT";} (yyval.sval)="FLOAT";}
-#line 1796 "grammar.tab.c"
+#line 249 "src/grammar.y"
+                 { if(toextend){currentType += " FLOAT";}else{currentType = "FLOAT";} toextend=false;(yyval.sval)="FLOAT";}
+#line 1796 "src/grammar.tab.c"
     break;
 
   case 99: /* type_specifier: DOUBLE  */
-#line 249 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " DOUBLE";}else{currentType = "DOUBLE";} (yyval.sval)="DOUBLE";}
-#line 1802 "grammar.tab.c"
+#line 250 "src/grammar.y"
+                 { if(toextend){currentType += " DOUBLE";}else{currentType = "DOUBLE";} toextend=false;(yyval.sval)="DOUBLE";}
+#line 1802 "src/grammar.tab.c"
     break;
 
   case 100: /* type_specifier: SIGNED  */
-#line 250 "grammar.y"
-                 { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " SIGNED";}else{currentType = "SIGNED";} (yyval.sval)="SIGNED";}
-#line 1808 "grammar.tab.c"
+#line 251 "src/grammar.y"
+                 { if(toextend){currentType += " SIGNED";}else{currentType = "SIGNED";toextend=true;} (yyval.sval)="SIGNED";}
+#line 1808 "src/grammar.tab.c"
     break;
 
   case 101: /* type_specifier: UNSIGNED  */
-#line 251 "grammar.y"
-                   { if(currentType=="STATIC"||currentType=="AUTO"){currentType += " UNSIGNED";}else{currentType = "UNSIGNED";} (yyval.sval)="UNSIGNED";}
-#line 1814 "grammar.tab.c"
+#line 252 "src/grammar.y"
+                   { if(toextend){currentType += " UNSIGNED";}else{currentType = "UNSIGNED";toextend=true;} (yyval.sval)="UNSIGNED";}
+#line 1814 "src/grammar.tab.c"
     break;
 
   case 102: /* type_specifier: struct_or_union_specifier  */
-#line 252 "grammar.y"
-                                    {  }
-#line 1820 "grammar.tab.c"
+#line 253 "src/grammar.y"
+                                    { toextend=false;  }
+#line 1820 "src/grammar.tab.c"
     break;
 
   case 103: /* type_specifier: enum_specifier  */
-#line 253 "grammar.y"
-                         {  }
-#line 1826 "grammar.tab.c"
+#line 254 "src/grammar.y"
+                         {  toextend=false;}
+#line 1826 "src/grammar.tab.c"
     break;
 
   case 104: /* type_specifier: TYPE_NAME  */
-#line 254 "grammar.y"
-                    { currentType = "TYPE_NAME"; (yyval.sval)="TYPE_NAME";}
-#line 1832 "grammar.tab.c"
+#line 255 "src/grammar.y"
+                    { currentType = "TYPE_NAME"; (yyval.sval)="TYPE_NAME";toextend=false;}
+#line 1832 "src/grammar.tab.c"
     break;
 
   case 105: /* struct_or_union_specifier: struct_or_union IDENTIFIER '{' struct_declaration_list '}'  */
-#line 260 "grammar.y"
+#line 261 "src/grammar.y"
         {
             currentType = string((yyvsp[-4].sval)) + " " + string((yyvsp[-3].sval)); // Set currentType to "struct Point" or "union Point"
-            add_to_token_table((yyvsp[-3].sval), (yyvsp[-4].sval));                 // Add "Point" as a struct or union to the symbol table
+            add_to_token_table((yyvsp[-3].sval), (yyvsp[-4].sval));           // Add "Point" as a struct or union to the symbol table
         }
-#line 1841 "grammar.tab.c"
+#line 1841 "src/grammar.tab.c"
     break;
 
   case 106: /* struct_or_union_specifier: struct_or_union '{' struct_declaration_list '}'  */
-#line 265 "grammar.y"
+#line 266 "src/grammar.y"
            {
 		 
 	   }
-#line 1849 "grammar.tab.c"
+#line 1849 "src/grammar.tab.c"
     break;
 
   case 107: /* struct_or_union_specifier: struct_or_union IDENTIFIER  */
-#line 269 "grammar.y"
+#line 270 "src/grammar.y"
         {
             currentType = string((yyvsp[-1].sval)) + " " + string((yyvsp[0].sval)); // Handle forward declaration of structs/unions
 			add_to_token_table((yyvsp[0].sval),(yyvsp[-1].sval));
         }
-#line 1858 "grammar.tab.c"
+#line 1858 "src/grammar.tab.c"
     break;
 
   case 108: /* struct_or_union: STRUCT  */
-#line 277 "grammar.y"
+#line 278 "src/grammar.y"
               { (yyval.sval) = "struct"; }
-#line 1864 "grammar.tab.c"
+#line 1864 "src/grammar.tab.c"
     break;
 
   case 109: /* struct_or_union: UNION  */
-#line 278 "grammar.y"
+#line 279 "src/grammar.y"
               { (yyval.sval) = "union"; }
-#line 1870 "grammar.tab.c"
+#line 1870 "src/grammar.tab.c"
     break;
 
   case 122: /* enum_specifier: ENUM '{' enumerator_list '}'  */
-#line 310 "grammar.y"
+#line 311 "src/grammar.y"
       {
         currentType = "ENUM";
         (yyval.sval) = strdup("ENUM");
       }
-#line 1879 "grammar.tab.c"
+#line 1879 "src/grammar.tab.c"
     break;
 
   case 123: /* enum_specifier: ENUM IDENTIFIER '{' enumerator_list '}'  */
-#line 315 "grammar.y"
+#line 316 "src/grammar.y"
       {
         std::string enumType = "enum " + std::string((yyvsp[-3].sval));
         currentType = enumType.c_str();
         (yyval.sval) = strdup(enumType.c_str());
         add_to_token_table((yyvsp[-3].sval), "enum");
+
       }
-#line 1890 "grammar.tab.c"
+#line 1891 "src/grammar.tab.c"
     break;
 
   case 124: /* enum_specifier: ENUM IDENTIFIER  */
-#line 322 "grammar.y"
+#line 324 "src/grammar.y"
       {
         std::string enumType = "enum " + std::string((yyvsp[0].sval));
         currentType = enumType.c_str();
         (yyval.sval) = strdup(enumType.c_str());
         add_to_token_table((yyvsp[0].sval), "enum");
       }
-#line 1901 "grammar.tab.c"
+#line 1902 "src/grammar.tab.c"
+    break;
+
+  case 129: /* type_qualifier: CONST  */
+#line 347 "src/grammar.y"
+                {currentType="const"; toextend=true;}
+#line 1908 "src/grammar.tab.c"
+    break;
+
+  case 130: /* type_qualifier: VOLATILE  */
+#line 348 "src/grammar.y"
+                   {currentType="volatile"; toextend=true;}
+#line 1914 "src/grammar.tab.c"
     break;
 
   case 131: /* declarator: pointer direct_declarator  */
-#line 350 "grammar.y"
-                                    {add_to_token_table((yyvsp[0].sval),currentType);}
-#line 1907 "grammar.tab.c"
+#line 352 "src/grammar.y"
+                                    {add_to_token_table((yyvsp[0].sval),currentType); currentType=""; toextend=false;}
+#line 1920 "src/grammar.tab.c"
     break;
 
   case 133: /* direct_declarator: IDENTIFIER  */
-#line 355 "grammar.y"
+#line 357 "src/grammar.y"
                      { 
 		add_to_token_table((yyvsp[0].sval), currentType);
 		(yyval.sval) = (yyvsp[0].sval); // Propagate the identifier up the parse tree
 	}
-#line 1916 "grammar.tab.c"
+#line 1929 "src/grammar.tab.c"
     break;
 
   case 134: /* direct_declarator: '(' declarator ')'  */
-#line 359 "grammar.y"
+#line 361 "src/grammar.y"
                              { (yyval.sval) = (yyvsp[-1].sval); }
-#line 1922 "grammar.tab.c"
+#line 1935 "src/grammar.tab.c"
     break;
 
   case 135: /* direct_declarator: direct_declarator '[' constant_expression ']'  */
-#line 360 "grammar.y"
+#line 362 "src/grammar.y"
                                                         { 
 		// For array types, you might want to append [] to the type
 		string arrayType = currentType + "[]";
 		add_to_token_table((yyvsp[-3].sval), arrayType);
 		(yyval.sval) = (yyvsp[-3].sval);
 	}
-#line 1933 "grammar.tab.c"
+#line 1946 "src/grammar.tab.c"
     break;
 
   case 136: /* direct_declarator: direct_declarator '[' ']'  */
-#line 366 "grammar.y"
+#line 368 "src/grammar.y"
                                     {
 		string arrayType = currentType + "[]";
 		add_to_token_table((yyvsp[-2].sval), arrayType);
 		(yyval.sval) = (yyvsp[-2].sval);
 	}
-#line 1943 "grammar.tab.c"
+#line 1956 "src/grammar.tab.c"
     break;
 
   case 137: /* direct_declarator: direct_declarator '(' parameter_type_list ')'  */
-#line 371 "grammar.y"
+#line 373 "src/grammar.y"
                                                         {
 		// For function types, you might want to handle this differently
-		string funcType = currentType + " function";
+		string funcType = "procedure";
 		add_to_token_table((yyvsp[-3].sval), funcType);
 		(yyval.sval) = (yyvsp[-3].sval);
 	}
-#line 1954 "grammar.tab.c"
+#line 1967 "src/grammar.tab.c"
     break;
 
   case 138: /* direct_declarator: direct_declarator '(' identifier_list ')'  */
-#line 377 "grammar.y"
+#line 379 "src/grammar.y"
                                                     {
 		string funcType = currentType + " function";
 		add_to_token_table((yyvsp[-3].sval), funcType);
 		(yyval.sval) = (yyvsp[-3].sval);
 	}
-#line 1964 "grammar.tab.c"
+#line 1977 "src/grammar.tab.c"
     break;
 
   case 139: /* direct_declarator: direct_declarator '(' ')'  */
-#line 382 "grammar.y"
+#line 384 "src/grammar.y"
                                     {
 		string funcType = currentType + " function";
 		add_to_token_table((yyvsp[-2].sval), funcType);
 		(yyval.sval) = (yyvsp[-2].sval);
 	}
-#line 1974 "grammar.tab.c"
+#line 1987 "src/grammar.tab.c"
     break;
 
   case 140: /* pointer: '*'  */
-#line 391 "grammar.y"
+#line 393 "src/grammar.y"
               {currentType+='*';}
-#line 1980 "grammar.tab.c"
+#line 1993 "src/grammar.tab.c"
     break;
 
   case 142: /* pointer: '*' pointer  */
-#line 393 "grammar.y"
+#line 395 "src/grammar.y"
                       { 
             currentType+='*';
         }
-#line 1988 "grammar.tab.c"
+#line 2001 "src/grammar.tab.c"
     break;
 
 
-#line 1992 "grammar.tab.c"
+#line 2005 "src/grammar.tab.c"
 
       default: break;
     }
@@ -2181,7 +2194,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 534 "grammar.y"
+#line 536 "src/grammar.y"
 
 
 #include <iostream>
@@ -2193,6 +2206,11 @@ extern int yyparse();
 void yyerror(const char *s) {
     extern int line;
     fprintf(stderr, "Error: %s at line %d\n", s, line);
+	syntaxerror="ERROR: ";
+	syntaxerror+=s;
+	syntaxerror+="at line ";
+	syntaxerror += std::to_string(line);
+
 }
 
 // Define the global variables here
@@ -2243,6 +2261,8 @@ int main(int argc, char *argv[]) {
          cout << "Parsing successful!" << endl;
     } else {
         cerr << "Parsing failed!" << endl;
+		outputFile << "Parsing Failed!" << endl;
+		outputFile << syntaxerror << endl;
     }
        // Check if there are errors
     if (!error.empty()) {
@@ -2253,6 +2273,7 @@ int main(int argc, char *argv[]) {
         }
     } 
 	else {
+		/*
         outputFile << "Original Symbol Table:\n";
         outputFile << "-------------------------------------------------------------------------------\n";
         outputFile << "| Lexeme                                | Token                                 |\n";
@@ -2275,24 +2296,25 @@ int main(int argc, char *argv[]) {
         }
         outputFile << "-------------------------------------------------------------------------------\n";
         outputFile << '\n';
+		*/
+		
+		outputFile << "\nNew Symbol Table (Tokens and Types):\n";
+		outputFile << "-------------------------------------------------------------------------------\n";
+		outputFile << "| Token                                 | Type                                  |\n";
+		outputFile << "-------------------------------------------------------------------------------\n";
 
-        outputFile << "\nNew Symbol Table (Tokens and Types):\n";
-        outputFile << "-------------------------------------------------------------------------------\n";
-        outputFile << "| Token                 | Type                  |\n";
-        outputFile << "-------------------------------------------------------------------------------\n";
+		for (const auto &entry : new_symtab) {
+			outputFile << "| " << setw(36) << left << entry.first
+					<< " | " << setw(36) << left << entry.second << "|\n";
+		}
 
-        for (const auto &entry : new_symtab) {
-            outputFile << "| " << setw(20) << left << entry.first
-                       << " | " << setw(20) << left << entry.second << "\n";
-        }
-
-        outputFile << "-------------------------------------------------------------------------------\n";
-        outputFile << '\n';
-        outputFile << "whole program after separation:\n";
-        for (const auto &i : program) {
-            outputFile << "|" << i << "|\n";
-        }
-
+		outputFile << "-------------------------------------------------------------------------------\n";
+		outputFile << '\n';
+		outputFile << "whole program after separation:\n";
+		for (const auto &i : program) {
+			outputFile << "|" << i << "|\n";
+		}
+		
     }
 
     fclose(inputFile);
