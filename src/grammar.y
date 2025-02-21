@@ -248,22 +248,29 @@ type_specifier
 	| DOUBLE { currentType = "DOUBLE"; }
 	| SIGNED { currentType = "SIGNED"; }
 	| UNSIGNED { currentType = "UNSIGNED"; }
-	| struct_or_union_specifier { currentType = "STRUCT"; } // Simplified, you might want to handle this more specifically
+	| struct_or_union_specifier {  } // Simplified, you might want to handle this more specifically
 	| enum_specifier { currentType = "ENUM"; } // Simplified, you might want to handle this more specifically
 	| TYPE_NAME { currentType = "TYPE_NAME"; } // You might want to handle this differently depending on your needs
 	;
 
 
 struct_or_union_specifier
-	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
-	| struct_or_union '{' struct_declaration_list '}'
-	| struct_or_union IDENTIFIER
-	;
+    : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+        {
+            currentType = string($1) + " " + string($2); // Set currentType to "struct Point" or "union Point"
+            add_to_token_table($2, $1);                 // Add "Point" as a struct or union to the symbol table
+        }
+    | struct_or_union IDENTIFIER
+        {
+            currentType = string($1) + " " + string($2); // Handle forward declaration of structs/unions
+        }
+    ;
+
 
 struct_or_union
-	: STRUCT
-	| UNION
-	;
+    : STRUCT  { $$ = "struct"; } // Return "struct" for STRUCT tokens
+    | UNION   { $$ = "union"; }  // Return "union" for UNION tokens
+    ;
 
 struct_declaration_list
 	: struct_declaration
