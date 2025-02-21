@@ -2,18 +2,40 @@ Original Symbol Table:
 -------------------------------------------------------------------------------
 | Lexeme                                | Token                                 |
 -------------------------------------------------------------------------------
-| }                                    | SEPERATOR                            |
-| char                                 | CHAR                                 |
-| ;                                    | SEPERATOR                            |
-| ,                                    | SEPERATOR                            |
-| x                                    | IDENTIFIER                           |
-| {                                    | SEPERATOR                            |
-| )                                    | SEPERATOR                            |
-| (                                    | SEPERATOR                            |
-| z                                    | IDENTIFIER                           |
-| main                                 | IDENTIFIER                           |
-| y                                    | IDENTIFIER                           |
+| =                                    | ASSIGN                               |
+| today                                | IDENTIFIER                           |
+| alpha                                | IDENTIFIER                           |
+| *                                    | MUL                                  |
+| SUNDAY                               | IDENTIFIER                           |
+| MONDAY                               | IDENTIFIER                           |
+| DaysOfWeek                           | IDENTIFIER                           |
 | int                                  | INT                                  |
+| ;                                    | SEPERATOR                            |
+| b                                    | IDENTIFIER                           |
+| ,                                    | SEPERATOR                            |
+| enum                                 | ENUM                                 |
+| point1                               | IDENTIFIER                           |
+| }                                    | SEPERATOR                            |
+| a                                    | IDENTIFIER                           |
+| struct                               | STRUCT                               |
+| P                                    | IDENTIFIER                           |
+| TUESDAY                              | IDENTIFIER                           |
+| WEDNESDAY                            | IDENTIFIER                           |
+| THURSDAY                             | IDENTIFIER                           |
+| )                                    | SEPERATOR                            |
+| beta                                 | IDENTIFIER                           |
+| FRIDAY                               | IDENTIFIER                           |
+| 10                                   | INTEGER                              |
+| ]                                    | SEPERATOR                            |
+| SATURDAY                             | IDENTIFIER                           |
+| {                                    | SEPERATOR                            |
+| char                                 | CHAR                                 |
+| main                                 | IDENTIFIER                           |
+| (                                    | SEPERATOR                            |
+| x                                    | IDENTIFIER                           |
+| y                                    | IDENTIFIER                           |
+| z                                    | IDENTIFIER                           |
+| [                                    | SEPERATOR                            |
 -------------------------------------------------------------------------------
 
 
@@ -21,13 +43,50 @@ New Symbol Table (Tokens and Types):
 -------------------------------------------------------------------------------
 | Token                 | Type                  |
 -------------------------------------------------------------------------------
+| beta                 | CHAR pointer        
+| point1               | struct P            
+| today                | enum DaysOfWeek     
 | y                    | INT                 
 | x                    | INT                 
+| DaysOfWeek           | enum                
 | z                    | CHAR                
 | main                 | INT function        
+| P                    | struct              
+| alpha                | CHAR pointer        
+| b                    | INT                 
+| a                    | INT[]               
 -------------------------------------------------------------------------------
 
 whole program after separation:
+|struct|
+|P|
+|{|
+|int|
+|a|
+|;|
+|int|
+|b|
+|;|
+|}|
+|;|
+|enum|
+|DaysOfWeek|
+|{|
+|SUNDAY|
+|,|
+|MONDAY|
+|,|
+|TUESDAY|
+|,|
+|WEDNESDAY|
+|,|
+|THURSDAY|
+|,|
+|FRIDAY|
+|,|
+|SATURDAY|
+|}|
+|;|
 |int|
 |main|
 |(|
@@ -40,5 +99,30 @@ whole program after separation:
 |;|
 |char|
 |z|
+|;|
+|struct|
+|P|
+|point1|
+|;|
+|int|
+|a|
+|[|
+|10|
+|]|
+|;|
+|char|
+|*|
+|alpha|
+|;|
+|char|
+|*|
+|*|
+|beta|
+|;|
+|enum|
+|DaysOfWeek|
+|today|
+|=|
+|WEDNESDAY|
 |;|
 |}|

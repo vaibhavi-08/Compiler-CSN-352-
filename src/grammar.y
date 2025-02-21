@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include <cstring> // Required for strdup
 
 using namespace std;
 
@@ -239,18 +240,18 @@ storage_class_specifier
 	;
 
 type_specifier
-	: VOID   { currentType = "VOID"; }
-	| CHAR   { currentType = "CHAR"; }
-	| SHORT  { currentType = "SHORT"; }
-	| INT    { currentType = "INT"; }
-	| LONG   { currentType = "LONG"; }
-	| FLOAT  { currentType = "FLOAT"; }
-	| DOUBLE { currentType = "DOUBLE"; }
-	| SIGNED { currentType = "SIGNED"; }
-	| UNSIGNED { currentType = "UNSIGNED"; }
+	: VOID   { currentType = "VOID"; $$="VOID"; }
+	| CHAR   { currentType = "CHAR"; $$= "CHAR";}
+	| SHORT  { currentType = "SHORT"; $$="SHORT";}
+	| INT    { currentType = "INT"; $$="INT";}
+	| LONG   { currentType = "LONG"; $$="LONG";}
+	| FLOAT  { currentType = "FLOAT"; $$="FLOAT";}
+	| DOUBLE { currentType = "DOUBLE"; $$="DOUBLE";}
+	| SIGNED { currentType = "SIGNED"; $$="SIGNED";}
+	| UNSIGNED { currentType = "UNSIGNED"; $$="UNSIGNED";}
 	| struct_or_union_specifier {  } // Simplified, you might want to handle this more specifically
-	| enum_specifier { currentType = "ENUM"; } // Simplified, you might want to handle this more specifically
-	| TYPE_NAME { currentType = "TYPE_NAME"; } // You might want to handle this differently depending on your needs
+	| enum_specifier {  } // Simplified, you might want to handle this more specifically
+	| TYPE_NAME { currentType = "TYPE_NAME"; $$="TYPE_NAME";} // You might want to handle this differently depending on your needs
 	;
 
 
@@ -260,9 +261,14 @@ struct_or_union_specifier
             currentType = string($1) + " " + string($2); // Set currentType to "struct Point" or "union Point"
             add_to_token_table($2, $1);                 // Add "Point" as a struct or union to the symbol table
         }
+	| struct_or_union '{' struct_declaration_list '}' 
+	   {
+		 
+	   }
     | struct_or_union IDENTIFIER
         {
             currentType = string($1) + " " + string($2); // Handle forward declaration of structs/unions
+			add_to_token_table($2,$1);
         }
     ;
 
@@ -300,20 +306,40 @@ struct_declarator
 	;
 
 enum_specifier
-	: ENUM '{' enumerator_list '}'
-	| ENUM IDENTIFIER '{' enumerator_list '}'
-	| ENUM IDENTIFIER
-	;
+    : ENUM '{' enumerator_list '}'
+      {
+        currentType = "ENUM";
+        $$ = strdup("ENUM");
+      }
+    | ENUM IDENTIFIER '{' enumerator_list '}'
+      {
+        std::string enumType = "enum " + std::string($2);
+        currentType = enumType.c_str();
+        $$ = strdup(enumType.c_str());
+        add_to_token_table($2, "enum");
+      }
+    | ENUM IDENTIFIER
+      {
+        std::string enumType = "enum " + std::string($2);
+        currentType = enumType.c_str();
+        $$ = strdup(enumType.c_str());
+        add_to_token_table($2, "enum");
+      }
+    ;
+
 
 enumerator_list
-	: enumerator
-	| enumerator_list ',' enumerator
-	;
+    : enumerator
+    | enumerator_list ',' enumerator
+    ;
 
 enumerator
-	: IDENTIFIER
-	| IDENTIFIER '=' constant_expression
-	;
+    : IDENTIFIER
+      
+    | IDENTIFIER '=' constant_expression
+      
+    ;
+
 
 type_qualifier
 	: CONST
@@ -321,7 +347,7 @@ type_qualifier
 	;
 
 declarator
-	: pointer direct_declarator
+	: pointer direct_declarator {string pointerType=currentType+" pointer";add_to_token_table($2,pointerType);}
 	| direct_declarator
 	;
 
@@ -362,9 +388,12 @@ direct_declarator
 
 
 pointer
-	: '*'
+	: '*' {$$=strdup("*");}
 	| '*' type_qualifier_list
-	| '*' pointer
+	| '*' pointer { 
+            std::string temp = "* " + std::string($2);
+            $$ = strdup(temp.c_str());
+        }
 	| '*' type_qualifier_list pointer
 	;
 
