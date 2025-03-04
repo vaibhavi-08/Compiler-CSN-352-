@@ -1,0 +1,116 @@
+
+New Symbol Table (Tokens and Types):
+-------------------------------------------------------------------------------
+| Token                                 | Type                                  |
+-------------------------------------------------------------------------------
+| data                                 | union Data                          |
+| person1                              | struct Person                       |
+| name                                 | CHAR[]                              |
+| age                                  | INT                                 |
+| Data                                 | union                               |
+| favorite_day                         | enum Days                           |
+| Days                                 | enum                                |
+| today                                | enum Days                           |
+| Person                               | struct                              |
+| f                                    | FLOAT                               |
+| count                                | STATIC INT                          |
+| main                                 | INT function                        |
+| i                                    | INT                                 |
+| str                                  | CHAR[]                              |
+| counter                              | STATIC INT function                 |
+-------------------------------------------------------------------------------
+
+whole program after separation:
+|enum|
+|Days|
+|{|
+|MON|
+|,|
+|TUE|
+|,|
+|WED|
+|,|
+|THU|
+|,|
+|FRI|
+|,|
+|SAT|
+|,|
+|SUN|
+|}|
+|;|
+|struct|
+|Person|
+|{|
+|char|
+|name|
+|[|
+|50|
+|]|
+|;|
+|int|
+|age|
+|;|
+|enum|
+|Days|
+|favorite_day|
+|;|
+|}|
+|;|
+|union|
+|Data|
+|{|
+|int|
+|i|
+|;|
+|float|
+|f|
+|;|
+|char|
+|str|
+|[|
+|20|
+|]|
+|;|
+|}|
+|;|
+|static|
+|int|
+|counter|
+|(|
+|)|
+|{|
+|static|
+|int|
+|count|
+|=|
+|0|
+|;|
+|return|
+|++|
+|count|
+|;|
+|}|
+|int|
+|main|
+|(|
+|)|
+|{|
+|enum|
+|Days|
+|today|
+|=|
+|WED|
+|;|
+|struct|
+|Person|
+|person1|
+|;|
+|union|
+|Data|
+|data|
+|;|
+|return|
+|0|
+|;|
+|}|

@@ -355,34 +355,34 @@ declarator
 
 direct_declarator
 	: IDENTIFIER { 
-		add_to_token_table($1, currentType);
+		add_to_token_table($1, currentType);toextend=false;
 		$$ = $1; // Propagate the identifier up the parse tree
 	}
 	| '(' declarator ')' { $$ = $2; }
 	| direct_declarator '[' constant_expression ']' { 
 		// For array types, you might want to append [] to the type
-		string arrayType = currentType + "[]";
+		string arrayType = currentType + "[]";toextend=false;
 		add_to_token_table($1, arrayType);
 		$$ = $1;
 	}
 	| direct_declarator '[' ']' {
-		string arrayType = currentType + "[]";
+		string arrayType = currentType + "[]";toextend=false;
 		add_to_token_table($1, arrayType);
 		$$ = $1;
 	}
 	| direct_declarator '(' parameter_type_list ')' {
 		// For function types, you might want to handle this differently
-		string funcType = "procedure";
+		string funcType = "procedure";toextend=false;
 		add_to_token_table($1, funcType);
 		$$ = $1;
 	}
 	| direct_declarator '(' identifier_list ')' {
-		string funcType = currentType + " function";
+		string funcType = currentType + " function";toextend=false;
 		add_to_token_table($1, funcType);
 		$$ = $1;
 	}
 	| direct_declarator '(' ')' {
-		string funcType = currentType + " function";
+		string funcType = currentType + " function";toextend=false;
 		add_to_token_table($1, funcType);
 		$$ = $1;
 	}

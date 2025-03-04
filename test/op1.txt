@@ -1,0 +1,125 @@
+
+New Symbol Table (Tokens and Types):
+-------------------------------------------------------------------------------
+| Token                                 | Type                                  |
+-------------------------------------------------------------------------------
+| beta                                 | CHAR**                              |
+| e                                    | LONG                                |
+| z                                    | CHAR                                |
+| a                                    | INT[]                               |
+| point1                               | struct P                            |
+| b                                    | INT                                 |
+| today                                | enum DaysOfWeek                     |
+| h                                    | FLOAT                               |
+| P                                    | struct                              |
+| main                                 | INT function                        |
+| DaysOfWeek                           | enum                                |
+| alpha                                | CHAR*                               |
+| fun                                  | procedure                           |
+| ptr                                  | STATIC INT*                         |
+| g                                    | INT                                 |
+| y                                    | INT                                 |
+| x                                    | INT                                 |
+| gamma                                | STATIC INT                          |
+| lambda                               | UNSIGNED INT                        |
+-------------------------------------------------------------------------------
+
+whole program after separation:
+|struct|
+|P|
+|{|
+|int|
+|a|
+|;|
+|int|
+|b|
+|;|
+|}|
+|;|
+|enum|
+|DaysOfWeek|
+|{|
+|SUNDAY|
+|,|
+|MONDAY|
+|,|
+|TUESDAY|
+|,|
+|WEDNESDAY|
+|,|
+|THURSDAY|
+|,|
+|FRIDAY|
+|,|
+|SATURDAY|
+|}|
+|;|
+|int|
+|fun|
+|(|
+|int|
+|g|
+|,|
+|float|
+|h|
+|)|
+|{|
+|return|
+|1|
+|;|
+|}|
+|int|
+|main|
+|(|
+|)|
+|{|
+|int|
+|x|
+|,|
+|y|
+|;|
+|static|
+|int|
+|gamma|
+|;|
+|static|
+|int|
+|*|
+|ptr|
+|;|
+|unsigned|
+|int|
+|lambda|
+|;|
+|char|
+|z|
+|;|
+|struct|
+|P|
+|point1|
+|;|
+|long|
+|e|
+|;|
+|int|
+|a|
+|[|
+|10|
+|]|
+|;|
+|char|
+|*|
+|alpha|
+|;|
+|char|
+|*|
+|*|
+|beta|
+|;|
+|enum|
+|DaysOfWeek|
+|today|
+|=|
+|WEDNESDAY|
+|;|
+|}|
