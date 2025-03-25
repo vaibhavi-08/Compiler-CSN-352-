@@ -68,12 +68,12 @@ extern bool iserror;
 "volatile"              { symtab[yytext]="VOLATILE";program.emplace_back(yytext);count(); return VOLATILE;}
 "while"                 { symtab[yytext]="WHILE";program.emplace_back(yytext);count(); return WHILE;}
 
-{L}({L}|{D})*           { symtab[yytext]="IDENTIFIER";program.emplace_back(yytext);count();  return IDENTIFIER;}
-0[xX]{H}+{IS}?          { symtab[yytext]="CONSTANT HEX";program.emplace_back(yytext);count();  return CONSTANT;}
-{D}+{IS}                { symtab[yytext]="INTEGER";program.emplace_back(yytext);count(); return CONSTANT;}
-L?'(\\.|[^\\'])+'      { symtab[yytext]="CONSTANT CHAR";program.emplace_back(yytext);count();  return CONSTANT;}
-{D}+{E}{FS}?            { symtab[yytext]="CONSTANT EXP";program.emplace_back(yytext);count(); return CONSTANT;}
-{D}*"."{D}+({E})?{FS}?  { symtab[yytext]="CONSTANT FLOAT";program.emplace_back(yytext);count(); return CONSTANT;}
+{L}({L}|{D})*           { symtab[yytext]="IDENTIFIER";program.emplace_back(yytext);count(); Identifier * id = new Identifier(yytext);yylval.identifier = id; return IDENTIFIER;}
+0[xX]{H}+{IS}?          { symtab[yytext]="CONSTANT HEX";program.emplace_back(yytext);count();yylval.node = create_terminal("CONSTANT HEX", yytext);  return CONSTANT;}
+{D}+{IS}                { symtab[yytext]="INTEGER";program.emplace_back(yytext);count();yylval.node = create_terminal("CONSTANT INT", yytext); return CONSTANT;}
+L?'(\\.|[^\\'])+'      { symtab[yytext]="CONSTANT CHAR";program.emplace_back(yytext);count();yylval.node = create_terminal("CONSTANT", yytext);  return CONSTANT;}
+{D}+{E}{FS}?            { symtab[yytext]="CONSTANT EXP";program.emplace_back(yytext);count();  yylval.node = create_terminal("CONSTANT EXP", yytext);return CONSTANT;}
+{D}*"."{D}+({E})?{FS}?  { symtab[yytext]="CONSTANT FLOAT";program.emplace_back(yytext);count();yylval.node = create_terminal("CONSTANT FLOAT", yytext); return CONSTANT;}
 L?\"(\\.|[^\\"])*\"    { symtab[yytext]="STRING LITERAL";program.emplace_back(yytext);count();return STRING_LITERAL;}
 "..."                   { symtab[yytext]="ELLIPSIS";program.emplace_back(yytext);count(); return ELLIPSIS;}
 ">>="                   { symtab[yytext]="RIGHT_ASSIGN";program.emplace_back(yytext);count(); return RIGHT_ASSIGN;}

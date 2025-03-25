@@ -586,19 +586,20 @@ function_definition
 #include <ast.h>
 #include <symtab.h>
 #include <expression.h>
+extern int yyparse();
+extern char yytext[];
 extern FILE *yyin;
 extern FILE *yyout;
-Node * root = NULL;
-
-static std::ofstream dot_file;
-std::ofstream sym_file;
-extern int yyparse();
-
 void yyerror(const char *s) {
     fflush(stdout);
 	
 
 }
+Node * root = NULL;
+
+static std::ofstream dot_file;
+std::ofstream sym_file;
+
 
 // Define the global variables here
 bool iserror = false;
@@ -625,6 +626,31 @@ int main(int argc, char *argv[]) {
 		exit(0);
 	}
 	ofstream outputFile(outputFileName);
+  	dot_file.open(argv[3]); // = outfile;
+	sym_file.open("symtab.csv");
+
+
+	sym_file << "Scope,Function Name, Symbol Name, Symbol Type, Symbol Level\n";
+	std::stringstream ss;
+	ss << "digraph G {\n";
+	ss << "\tordering=out\n";
+	dot_file << ss.str();
+
+	root = create_non_term("translation_unit");
+
+	setup_primitive_types();
+
+	int abc = yyparse();
+	root->dotify();
+	
+	assert(abc == 0);
+	
+	ss.str("");
+	ss << "}\n";
+	dot_file << ss.str();
+
+	dot_file.close();
+	
 	if (!error.empty()) {
         outputFile << "Errors Found:\n";
         for (const auto &err : error) {
@@ -665,31 +691,6 @@ int main(int argc, char *argv[]) {
     cout << "Lexical analysis completed. Check '" << outputFileName << "' for results." << endl;
 	
     }
-// std::ofstream outfile(argv[3]);
-  	dot_file.open(argv[3]); // = outfile;
-	sym_file.open("symtab.csv");
-
-
-	sym_file << "Scope,Function Name, Symbol Name, Symbol Type, Symbol Level\n";
-	std::stringstream ss;
-	ss << "digraph G {\n";
-	ss << "\tordering=out\n";
-	dot_file << ss.str();
-
-	root = create_non_term("translation_unit");
-
-	setup_primitive_types();
-
-	int abc = yyparse();
-	root->dotify();
-	
-	assert(abc == 0);
-	
-	ss.str("");
-	ss << "}\n";
-	dot_file << ss.str();
-
-	dot_file.close();
 	outputFile.close();
 
 
