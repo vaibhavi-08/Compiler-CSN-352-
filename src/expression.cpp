@@ -851,7 +851,7 @@ Expression *create_assignment_expression( Expression *ue, Node *n_op,
         }
 
     } else {
-        std::cerr << "Incorrect logical or expression. Something went wrong\n";
+        std::cerr << "Incorrect logical or expression. Something went wrong" << line_num << "\n";
         std::cerr << "ERROR at line " << line_num << "\n";
         exit( 0 );
     }
